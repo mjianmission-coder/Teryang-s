@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Doc Teryang</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      background: black; /* Dark background for fireworks */
+      color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #ffd60a;
+      text-shadow: 0 0 10px #ff5733, 0 0 20px #ffbd69;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .photo {
+      width: 250px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .photo:hover {
+      transform: scale(1.05);
+    }
+
+    .message {
+      display: none;
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(255,255,255,0.3);
+      margin-top: 15px;
+      font-size: 1rem;
+      line-height: 1.6;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+
+  <div class="container">
+    <h1>🎆 Happy Birthday Doc Teryang! 🎂</h1>
+
+    <!-- Click the photo -->
+    <img src="1000011806.jpg" alt="Birthday Photo" class="photo" id="photo">
+
+    <!-- Hidden message -->
+    <div class="message" id="message">
+      <p>Happy Birthday Doc Teryang 🎉</p>
+      <p>Enjoy your day, salamat kaayo sa papaminaw sa amoang mga maoys and rants.</p>
+      <p>Padayon sa pagkamaayo og pagserve ni Lord 🙏</p>
+      <p>I hope na you are okay physically, mentally, emotionally and spiritually.</p>
+      <p>Padayon Doc! 💖</p>
+    </div>
+  </div>
+
+  <script>
+    // Click photo to reveal message
+    const photo = document.getElementById("photo");
+    const message = document.getElementById("message");
+
+    photo.addEventListener("click", () => {
+      message.style.display = "block";
+    });
+
+    // Fireworks
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.radius = Math.random() * 2 + 1;
+        this.angle = Math.random() * 2 * Math.PI;
+        this.speed = Math.random() * 5 + 2;
+        this.life = 100;
+        this.opacity = 1;
+      }
+      update() {
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.life--;
+        this.opacity = this.life / 100;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color},${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    function createFirework() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * (canvas.height / 2);
+      const colors = ["255,99,71", "255,215,0", "135,206,235", "255,20,147", "144,238,144"];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      for (let i = 0; i < 50; i++) {
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.update();
+        p.draw();
+        if (p.life <= 0) particles.splice(i, 1);
+      });
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(createFirework, 800);
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
